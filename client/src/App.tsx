@@ -6,16 +6,37 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Contact from "./pages/Contact";
-
+import Login from "./pages/Login";
+import ChatPage from "./pages/ChatPage";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { DashboardLayoutSkeleton } from "./components/DashboardLayoutSkeleton";
 
 function Router() {
+  const { isAuthenticated, loading } = useAuth();
+
+  // Show loading state while checking auth
+  if (loading) {
+    return <DashboardLayoutSkeleton />;
+  }
+
+  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/contact"} component={Contact} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
+      {!isAuthenticated ? (
+        <>
+          <Route path={"/login"} component={Login} />
+          <Route path={"/*"} component={Login} />
+        </>
+      ) : (
+        <>
+          <Route path={"/"} component={Home} />
+          <Route path={"/chat"} component={ChatPage} />
+          <Route path={"/contact"} component={Contact} />
+          <Route path={"/404"} component={NotFound} />
+          {/* Final fallback route */}
+          <Route component={NotFound} />
+        </>
+      )}
     </Switch>
   );
 }
@@ -30,8 +51,8 @@ function App() {
     <ErrorBoundary>
       <div lang="ar" dir="rtl">
         <ThemeProvider
-          defaultTheme="light"
-          // switchable
+          defaultTheme="dark"
+          switchable
         >
           <TooltipProvider>
             <Toaster />
