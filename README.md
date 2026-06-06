@@ -1,4 +1,8 @@
-# Web App Template (tRPC + Manus Auth + Database)
+# ai_3oman_web
+
+**النطاق الرسمي للمشروع: [https://3oman.8if.fun](https://3oman.8if.fun)**
+
+هذا المشروع هو منصة "ai_3oman" للذكاء الاصطناعي في عمان، مبني باستخدام تقنيات حديثة (tRPC + Manus Auth + Database).
 
 This template gives you a React 19 + Tailwind 4 + Express 4 + tRPC 11 stack with Manus OAuth already wired. Procedures are your contracts, types flow end to end, and authentication "just works".
 

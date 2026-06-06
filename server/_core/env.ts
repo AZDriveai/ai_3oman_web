@@ -1,3 +1,7 @@
+/**
+ * Official Domain: https://3oman.8if.fun
+ * The application is configured to recognize and operate on this domain.
+ */
 export const ENV = {
   appId: process.env.VITE_APP_ID ?? "",
   cookieSecret: process.env.JWT_SECRET ?? "",
