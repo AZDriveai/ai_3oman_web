@@ -31,6 +31,10 @@ function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
+      <Route path={"/"} component={Home} />
+      <Route path={"/contact"} component={Contact} />
+      <Route path={"/terms"} component={Terms} />
+      <Route path={"/privacy"} component={Privacy} />
       {!isAuthenticated ? (
         <>
           <Route path={"/login"} component={Login} />
@@ -38,7 +42,6 @@ function Router() {
         </>
       ) : (
         <>
-          <Route path={"/"} component={Home} />
           <Route path={"/dashboard"} component={DashboardPage} />
           <Route path={"/settings"} component={SettingsPage} />
           <Route path={"/search"} component={SearchPage} />
@@ -47,9 +50,6 @@ function Router() {
           <Route path={"/tasks"} component={TasksPage} />
           <Route path={"/imagine"} component={ImaginePage} />
           <Route path={"/builder"} component={NoCodeBuilderPage} />
-          <Route path={"/contact"} component={Contact} />
-          <Route path={"/terms"} component={Terms} />
-          <Route path={"/privacy"} component={Privacy} />
           <Route path={"/404"} component={NotFound} />
           {/* Final fallback route */}
           <Route component={NotFound} />
