@@ -45,4 +45,25 @@ export const connectors = mysqlTable("connectors", {
 export type Connector = typeof connectors.$inferSelect;
 export type InsertConnector = typeof connectors.$inferInsert;
 
+/**
+ * Tasks table for storing scheduled tasks
+ */
+export const tasks = mysqlTable("tasks", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  status: mysqlEnum("status", ["pending", "running", "completed", "failed"]).default("pending").notNull(),
+  schedule: varchar("schedule", { length: 255 }), // Cron expression
+  nextRun: timestamp("nextRun"),
+  lastRun: timestamp("lastRun"),
+  result: text("result"), // JSON string for task result
+  error: text("error"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Task = typeof tasks.$inferSelect;
+export type InsertTask = typeof tasks.$inferInsert;
+
 // TODO: Add your tables here

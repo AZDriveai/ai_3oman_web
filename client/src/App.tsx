@@ -9,6 +9,7 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import ChatPage from "./pages/ChatPage";
 import ConnectorsPage from "./pages/ConnectorsPage";
+import TasksPage from "./pages/TasksPage";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { DashboardLayoutSkeleton } from "./components/DashboardLayoutSkeleton";
 
@@ -33,6 +34,7 @@ function Router() {
           <Route path={"/"} component={Home} />
           <Route path={"/chat"} component={ChatPage} />
           <Route path={"/connectors"} component={ConnectorsPage} />
+          <Route path={"/tasks"} component={TasksPage} />
           <Route path={"/contact"} component={Contact} />
           <Route path={"/404"} component={NotFound} />
           {/* Final fallback route */}
