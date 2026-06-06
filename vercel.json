@@ -1,8 +1,11 @@
 {
   "version": 2,
+  "buildCommand": "pnpm run build",
+  "outputDirectory": "dist/public",
+  "framework": "vite",
   "rewrites": [
     {
-      "source": "/api/(.*)",
+      "source": "/api/trpc/(.*)",
       "destination": "/api/index.js"
     },
     {
