@@ -85,4 +85,25 @@ export const generatedImages = mysqlTable("generatedImages", {
 export type GeneratedImage = typeof generatedImages.$inferSelect;
 export type InsertGeneratedImage = typeof generatedImages.$inferInsert;
 
+/**
+ * Generated Code table for storing AI-generated code
+ */
+export const generatedCode = mysqlTable("generatedCode", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  prompt: text("prompt").notNull(),
+  code: text("code").notNull(),
+  language: varchar("language", { length: 50 }).default("jsx").notNull(),
+  status: mysqlEnum("status", ["generating", "completed", "failed"]).default("generating").notNull(),
+  error: text("error"),
+  metadata: text("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type GeneratedCodeItem = typeof generatedCode.$inferSelect;
+export type InsertGeneratedCodeItem = typeof generatedCode.$inferInsert;
+
 // TODO: Add your tables here
