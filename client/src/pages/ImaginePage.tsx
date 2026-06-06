@@ -1,18 +1,18 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
 import { useState } from "react";
-import { Wand2, Trash2, Download, Loader } from "lucide-react";
+import { Wand2, Trash2, Download, Loader, Edit3, X } from "lucide-react";
 
 export default function ImaginePage() {
   const { user, isAuthenticated } = useAuth();
   const [prompt, setPrompt] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [editingImage, setEditingImage] = useState<{ id: number; url: string; prompt: string } | null>(null);
 
   const listQuery = trpc.images.list.useQuery(undefined, {
     enabled: isAuthenticated,
@@ -20,8 +20,9 @@ export default function ImaginePage() {
 
   const generateMutation = trpc.images.generate.useMutation({
     onSuccess: () => {
-      toast.success("تم توليد الصورة بنجاح");
+      toast.success(editingImage ? "تم تعديل الصورة بنجاح" : "تم توليد الصورة بنجاح");
       setPrompt("");
+      setEditingImage(null);
       setIsGenerating(false);
       listQuery.refetch();
     },
@@ -51,6 +52,8 @@ export default function ImaginePage() {
     setIsGenerating(true);
     generateMutation.mutate({
       prompt,
+      editMode: !!editingImage,
+      originalImageUrl: editingImage?.url,
     });
   };
 
@@ -58,6 +61,12 @@ export default function ImaginePage() {
     if (confirm("هل أنت متأكد من حذف هذه الصورة؟")) {
       deleteMutation.mutate({ id });
     }
+  };
+
+  const handleEditImage = (image: { id: number; imageUrl: string; prompt: string }) => {
+    setEditingImage({ id: image.id, url: image.imageUrl, prompt: image.prompt });
+    setPrompt(`عدل هذه الصورة: ${image.prompt}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleDownloadImage = (imageUrl: string, prompt: string) => {
@@ -90,37 +99,79 @@ export default function ImaginePage() {
         </div>
 
         {/* Generator Form */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>وصف الصورة</CardTitle>
-            <CardDescription>اكتب وصفاً تفصيلياً للصورة التي تريد توليدها</CardDescription>
+        <Card className="mb-8 overflow-hidden border-primary/20 shadow-xl shadow-primary/5">
+          <CardHeader className="bg-primary/5 border-b border-primary/10">
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-xl">
+                  {editingImage ? "تحرير الصورة" : "توليد صورة جديدة"}
+                </CardTitle>
+                <CardDescription>
+                  {editingImage 
+                    ? "أدخل التغييرات التي تريد إجراءها على الصورة المختارة" 
+                    : "اكتب وصفاً تفصيلياً للصورة التي تريد توليدها"}
+                </CardDescription>
+              </div>
+              {editingImage && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => {
+                    setEditingImage(null);
+                    setPrompt("");
+                  }}
+                  className="gap-2"
+                >
+                  <X className="w-4 h-4" />
+                  إلغاء التحرير
+                </Button>
+              )}
+            </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="image-prompt">النص الوصفي</Label>
+          <CardContent className="p-6 space-y-6">
+            {editingImage && (
+              <div className="flex items-center gap-4 p-4 bg-muted/50 rounded-xl border border-border">
+                <img 
+                  src={editingImage.url} 
+                  alt="Original" 
+                  className="w-20 h-20 object-cover rounded-lg shadow-sm"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-bold text-muted-foreground mb-1 uppercase tracking-wider">الصورة الأصلية</p>
+                  <p className="text-sm text-foreground truncate">{editingImage.prompt}</p>
+                </div>
+              </div>
+            )}
+            
+            <div className="space-y-3">
+              <Label htmlFor="image-prompt" className="text-sm font-bold">
+                {editingImage ? "ما هي التعديلات المطلوبة؟" : "وصف الصورة"}
+              </Label>
               <Textarea
                 id="image-prompt"
-                placeholder="مثال: منظر طبيعي جميل مع جبال وسماء زرقاء..."
+                placeholder={editingImage ? "مثال: غير لون السماء إلى الأحمر..." : "مثال: منظر طبيعي جميل مع جبال وسماء زرقاء..."}
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 rows={4}
                 disabled={isGenerating}
+                className="resize-none focus:ring-primary/20 transition-all text-lg"
               />
             </div>
+            
             <Button
               onClick={handleGenerateImage}
               disabled={isGenerating || !prompt}
-              className="gap-2 w-full"
+              className="gap-3 w-full h-12 text-lg font-bold shadow-lg shadow-primary/20 transition-all hover:scale-[1.01]"
             >
               {isGenerating ? (
                 <>
-                  <Loader className="w-4 h-4 animate-spin" />
-                  جاري التوليد...
+                  <Loader className="w-5 h-5 animate-spin" />
+                  جاري {editingImage ? "التعديل" : "التوليد"}...
                 </>
               ) : (
                 <>
-                  <Wand2 className="w-4 h-4" />
-                  توليد الصورة
+                  {editingImage ? <Edit3 className="w-5 h-5" /> : <Wand2 className="w-5 h-5" />}
+                  {editingImage ? "تطبيق التعديلات" : "توليد الصورة"}
                 </>
               )}
             </Button>
@@ -157,14 +208,24 @@ export default function ImaginePage() {
                             size="sm"
                             variant="secondary"
                             onClick={() => handleDownloadImage(image.imageUrl, image.prompt)}
+                            title="تحميل"
                           >
                             <Download className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            onClick={() => handleEditImage(image)}
+                            title="تحرير"
+                          >
+                            <Edit3 className="w-4 h-4" />
                           </Button>
                           <Button
                             size="sm"
                             variant="destructive"
                             onClick={() => handleDeleteImage(image.id)}
                             disabled={deleteMutation.isPending}
+                            title="حذف"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>

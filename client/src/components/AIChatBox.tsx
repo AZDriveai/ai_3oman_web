@@ -2,9 +2,22 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { Loader2, Send, User, Sparkles } from "lucide-react";
+import { 
+  Loader2, 
+  Send, 
+  User, 
+  Sparkles, 
+  Copy, 
+  RotateCcw, 
+  ThumbsUp, 
+  ThumbsDown,
+  Paperclip,
+  Mic,
+  Image as ImageIcon
+} from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Streamdown } from "streamdown";
+import { toast } from "sonner";
 
 /**
  * Message type matching server-side LLM Message interface
@@ -254,18 +267,43 @@ export function AIChatBox({
 
                     <div
                       className={cn(
-                        "max-w-[80%] rounded-lg px-4 py-2.5",
+                        "max-w-[85%] rounded-2xl px-5 py-3 shadow-sm",
                         message.role === "user"
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted text-foreground"
+                          ? "bg-primary text-primary-foreground rounded-tl-none"
+                          : "bg-muted/50 text-foreground rounded-tr-none border border-border/50"
                       )}
                     >
                       {message.role === "assistant" ? (
-                        <div className="prose prose-sm dark:prose-invert max-w-none">
-                          <Streamdown>{message.content}</Streamdown>
+                        <div className="space-y-3">
+                          <div className="prose prose-sm dark:prose-invert max-w-none leading-relaxed">
+                            <Streamdown>{message.content}</Streamdown>
+                          </div>
+                          <div className="flex items-center gap-1 pt-2 border-t border-border/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-7 w-7 rounded-full hover:bg-background/50"
+                              onClick={() => {
+                                navigator.clipboard.writeText(message.content);
+                                toast.success("تم النسخ إلى الحافظة");
+                              }}
+                            >
+                              <Copy className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full hover:bg-background/50">
+                              <RotateCcw className="h-3.5 w-3.5" />
+                            </Button>
+                            <div className="flex-1" />
+                            <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full hover:bg-background/50">
+                              <ThumbsUp className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full hover:bg-background/50">
+                              <ThumbsDown className="h-3.5 w-3.5" />
+                            </Button>
+                          </div>
                         </div>
                       ) : (
-                        <p className="whitespace-pre-wrap text-sm">
+                        <p className="whitespace-pre-wrap text-sm leading-relaxed">
                           {message.content}
                         </p>
                       )}
@@ -303,33 +341,58 @@ export function AIChatBox({
       </div>
 
       {/* Input Area */}
-      <form
-        ref={inputAreaRef}
-        onSubmit={handleSubmit}
-        className="flex gap-2 p-4 border-t bg-background/50 items-end"
-      >
-        <Textarea
-          ref={textareaRef}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder={placeholder}
-          className="flex-1 max-h-32 resize-none min-h-9"
-          rows={1}
-        />
-        <Button
-          type="submit"
-          size="icon"
-          disabled={!input.trim() || isLoading}
-          className="shrink-0 h-[38px] w-[38px]"
+      <div className="p-4 border-t bg-background/80 backdrop-blur-sm">
+        <form
+          ref={inputAreaRef}
+          onSubmit={handleSubmit}
+          className="relative max-w-4xl mx-auto"
         >
-          {isLoading ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            <Send className="size-4" />
-          )}
-        </Button>
-      </form>
+          <div className="relative flex flex-col w-full bg-muted/30 rounded-2xl border border-border focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/5 transition-all overflow-hidden">
+            <Textarea
+              ref={textareaRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={placeholder}
+              className="w-full bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0 min-h-[60px] max-h-48 py-4 px-4 resize-none text-sm leading-relaxed"
+              rows={1}
+            />
+            
+            <div className="flex items-center justify-between px-3 py-2 bg-muted/20 border-t border-border/50">
+              <div className="flex items-center gap-1">
+                <Button type="button" variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-muted-foreground hover:text-primary">
+                  <Paperclip className="h-4 w-4" />
+                </Button>
+                <Button type="button" variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-muted-foreground hover:text-primary">
+                  <ImageIcon className="h-4 w-4" />
+                </Button>
+                <Button type="button" variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-muted-foreground hover:text-primary">
+                  <Mic className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              <Button
+                type="submit"
+                size="sm"
+                disabled={!input.trim() || isLoading}
+                className="gap-2 px-4 rounded-xl shadow-md shadow-primary/20 transition-all active:scale-95"
+              >
+                {isLoading ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <>
+                    <span className="hidden sm:inline">إرسال</span>
+                    <Send className="size-4" />
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+          <p className="text-[10px] text-center text-muted-foreground mt-2">
+            قد يقدم ai_3oman معلومات غير دقيقة. يرجى التحقق من الإجابات الهامة.
+          </p>
+        </form>
+      </div>
     </div>
   );
 }
