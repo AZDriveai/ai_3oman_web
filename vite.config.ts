@@ -70,9 +70,6 @@ function writeToLogFile(source: LogSource, entries: unknown[]) {
 
 /**
  * Vite plugin to collect browser debug logs
- * - POST /__manus__/logs: Browser sends logs, written directly to files
- * - Files: browserConsole.log, networkRequests.log, sessionReplay.log
- * - Auto-trimmed when exceeding 1MB (keeps newest entries)
  */
 function vitePluginManusDebugCollector(): Plugin {
   return {
@@ -98,14 +95,12 @@ function vitePluginManusDebugCollector(): Plugin {
     },
 
     configureServer(server: ViteDevServer) {
-      // POST /__manus__/logs: Browser sends logs (written directly to files)
       server.middlewares.use("/__manus__/logs", (req, res, next) => {
         if (req.method !== "POST") {
           return next();
         }
 
         const handlePayload = (payload: any) => {
-          // Write logs directly to files
           if (payload.consoleLogs?.length > 0) {
             writeToLogFile("browserConsole", payload.consoleLogs);
           }
@@ -167,6 +162,20 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    reportCompressedSize: false, // تحسين سرعة البناء
+    cssCodeSplit: true, // تقسيم ملفات CSS
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // تقسيم المكتبات الكبيرة لتقليل حجم الملف الرئيسي
+          'vendor-react': ['react', 'react-dom', 'wouter'],
+          'vendor-ui': ['lucide-react', 'framer-motion', 'clsx', 'tailwind-merge'],
+          'vendor-utils': ['date-fns', 'axios', 'zod'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+    minify: 'esbuild', // استخدام esbuild للميني فاير الأسرع
   },
   server: {
     host: true,
