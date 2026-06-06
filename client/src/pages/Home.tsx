@@ -1,25 +1,35 @@
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
+import Sidebar from "@/components/Sidebar";
+import ChatInterface from "@/components/ChatInterface";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { useState } from "react";
 
 /**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Best Practices, Design Guide and Common Pitfalls
+ * Design Philosophy: Modern Minimalist
+ * - Clean white background with subtle accents
+ * - Blue primary color for interactions
+ * - IBM Plex Sans for body text, Geist for headings
+ * - Two-column layout with sidebar and main content
+ * - Smooth transitions and minimal animations
  */
+
 export default function Home() {
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
+  const [currentChatId, setCurrentChatId] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
-      </main>
+    <div className="flex flex-col h-screen bg-background">
+      <Header />
+      <div className="flex flex-1 mt-16">
+        <Sidebar
+          onNewChat={() => setCurrentChatId(null)}
+          onSelectChat={(id) => setCurrentChatId(id)}
+        />
+
+        <main className="flex-1 lg:ml-64 flex flex-col">
+          <ChatInterface />
+        </main>
+      </div>
+      <Footer />
     </div>
   );
 }
