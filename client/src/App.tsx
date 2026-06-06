@@ -12,6 +12,11 @@ import ConnectorsPage from "./pages/ConnectorsPage";
 import TasksPage from "./pages/TasksPage";
 import ImaginePage from "./pages/ImaginePage";
 import NoCodeBuilderPage from "./pages/NoCodeBuilderPage";
+import DashboardPage from "./pages/DashboardPage";
+import SettingsPage from "./pages/SettingsPage";
+import SearchPage from "./pages/SearchPage";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { DashboardLayoutSkeleton } from "./components/DashboardLayoutSkeleton";
 
@@ -34,12 +39,17 @@ function Router() {
       ) : (
         <>
           <Route path={"/"} component={Home} />
+          <Route path={"/dashboard"} component={DashboardPage} />
+          <Route path={"/settings"} component={SettingsPage} />
+          <Route path={"/search"} component={SearchPage} />
           <Route path={"/chat"} component={ChatPage} />
           <Route path={"/connectors"} component={ConnectorsPage} />
           <Route path={"/tasks"} component={TasksPage} />
           <Route path={"/imagine"} component={ImaginePage} />
           <Route path={"/builder"} component={NoCodeBuilderPage} />
           <Route path={"/contact"} component={Contact} />
+          <Route path={"/terms"} component={Terms} />
+          <Route path={"/privacy"} component={Privacy} />
           <Route path={"/404"} component={NotFound} />
           {/* Final fallback route */}
           <Route component={NotFound} />

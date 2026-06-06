@@ -8,7 +8,8 @@ import {
   User as UserIcon,
   LayoutDashboard,
   Image as ImageIcon,
-  CheckSquare
+  CheckSquare,
+  Search
 } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import {
@@ -59,6 +60,12 @@ export default function Header() {
               <a className={`px-4 py-2 rounded-full transition-all text-sm font-medium flex items-center gap-2 ${location === '/imagine' ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary text-muted-foreground hover:text-foreground'}`}>
                 <ImageIcon className="w-4 h-4" />
                 الصور
+              </a>
+            </Link>
+            <Link href="/search">
+              <a className={`px-4 py-2 rounded-full transition-all text-sm font-medium flex items-center gap-2 ${location === '/search' ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary text-muted-foreground hover:text-foreground'}`}>
+                <Search className="w-4 h-4" />
+                البحث
               </a>
             </Link>
           </nav>

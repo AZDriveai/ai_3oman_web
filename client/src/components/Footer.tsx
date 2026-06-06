@@ -41,7 +41,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/terms"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   الشروط والأحكام
@@ -49,7 +49,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/privacy"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   سياسة الخصوصية

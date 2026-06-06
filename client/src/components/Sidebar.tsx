@@ -24,7 +24,7 @@ export default function Sidebar({ onNewChat, onSelectChat }: SidebarProps) {
       {/* Mobile Toggle */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-20 left-4 z-50 lg:hidden p-2 bg-background border border-border shadow-sm rounded-lg"
+        className="fixed top-20 right-4 z-50 lg:hidden p-2 bg-background border border-border shadow-sm rounded-lg"
       >
         {isOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
@@ -32,16 +32,16 @@ export default function Sidebar({ onNewChat, onSelectChat }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed left-0 top-16 h-[calc(100vh-4rem)] bg-sidebar border-r border-border transition-all duration-300 z-40",
-          isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
+          "fixed right-0 top-16 h-[calc(100vh-4rem)] bg-sidebar border-l border-border transition-all duration-300 z-40",
+          isOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0",
           isCollapsed ? "w-16" : "w-64"
         )}
       >
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="hidden lg:flex absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-background border border-border rounded-full items-center justify-center shadow-sm z-50 hover:bg-secondary transition-colors"
+          className="hidden lg:flex absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-background border border-border rounded-full items-center justify-center shadow-sm z-50 hover:bg-secondary transition-colors"
         >
-          {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+          {isCollapsed ? <ChevronLeft size={14} /> : <ChevronRight size={14} />}
         </button>
 
         <div className="flex flex-col h-full">

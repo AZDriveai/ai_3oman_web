@@ -94,7 +94,7 @@ export default function ChatPage() {
     <div className="flex h-full w-full overflow-hidden bg-background">
       <Sidebar onNewChat={handleNewChat} onSelectChat={handleSelectChat} />
       
-      <main className="flex-1 flex flex-col h-full lg:mr-0 transition-all duration-300">
+      <main className="flex-1 flex flex-col h-full lg:ml-0 transition-all duration-300">
         <div className="flex-1 flex flex-col h-full pt-16 lg:pl-0">
           <AIChatBox
             messages={messages.filter((m) => m.role !== "system")}
