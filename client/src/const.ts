@@ -13,11 +13,15 @@ export const getLoginUrl = () => {
     baseUrl = `https://${baseUrl}`;
   }
   
-  const url = new URL(`${baseUrl.replace(/\/$/, '')}/app-auth`);
-  url.searchParams.set("appId", appId);
-  url.searchParams.set("redirectUri", redirectUri);
-  url.searchParams.set("state", state);
-  url.searchParams.set("type", "signIn");
-
-  return url.toString();
+  try {
+    const url = new URL(`${baseUrl.replace(/\/$/, '')}/app-auth`);
+    url.searchParams.set("appId", appId);
+    url.searchParams.set("redirectUri", redirectUri);
+    url.searchParams.set("state", state);
+    url.searchParams.set("type", "signIn");
+    return url.toString();
+  } catch (e) {
+    console.error("Invalid OAuth URL configuration", e);
+    return "/login"; // Fallback to local login page
+  }
 };
