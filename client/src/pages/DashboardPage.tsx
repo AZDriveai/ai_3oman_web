@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { MessageSquare, Image as ImageIcon, CheckSquare, Zap, TrendingUp, Clock } from "lucide-react";
 import { Link } from "wouter";
-import { DashboardLayout } from "@/components/DashboardLayout";
+import DashboardLayout from "@/components/DashboardLayout";
 
 export default function DashboardPage() {
   const { user } = useAuth();
