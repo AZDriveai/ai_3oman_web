@@ -40,20 +40,16 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-500">
-            <Link href={isAuthenticated ? "/chat" : "/login"}>
-              <a>
-                <Button size="lg" className="h-14 px-8 text-lg font-bold gap-2 shadow-xl shadow-primary/20 hover:scale-105 transition-all">
-                  ابدأ الآن مجاناً
-                  <ArrowRight className="w-5 h-5" />
-                </Button>
-              </a>
+            <Link href={isAuthenticated ? "/dashboard" : "/login"}>
+              <Button size="lg" className="h-14 px-8 text-lg font-bold gap-2 shadow-xl shadow-primary/20 hover:scale-105 transition-all">
+                ابدأ الآن مجاناً
+                <ArrowRight className="w-5 h-5" />
+              </Button>
             </Link>
             <Link href="/contact">
-              <a>
-                <Button size="lg" variant="outline" className="h-14 px-8 text-lg font-bold hover:bg-secondary">
-                  تواصل معنا
-                </Button>
-              </a>
+              <Button size="lg" variant="outline" className="h-14 px-8 text-lg font-bold hover:bg-secondary">
+                تواصل معنا
+              </Button>
             </Link>
           </div>
         </div>
