@@ -66,4 +66,23 @@ export const tasks = mysqlTable("tasks", {
 export type Task = typeof tasks.$inferSelect;
 export type InsertTask = typeof tasks.$inferInsert;
 
+/**
+ * Generated Images table for storing AI-generated images
+ */
+export const generatedImages = mysqlTable("generatedImages", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  prompt: text("prompt").notNull(),
+  imageUrl: varchar("imageUrl", { length: 1024 }).notNull(),
+  imageKey: varchar("imageKey", { length: 255 }).notNull(),
+  status: mysqlEnum("status", ["generating", "completed", "failed"]).default("generating").notNull(),
+  error: text("error"),
+  metadata: text("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type GeneratedImage = typeof generatedImages.$inferSelect;
+export type InsertGeneratedImage = typeof generatedImages.$inferInsert;
+
 // TODO: Add your tables here

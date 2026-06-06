@@ -15,6 +15,13 @@
       "when": 1780746309390,
       "tag": "0001_flawless_justin_hammer",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1780746488582,
+      "tag": "0002_lonely_saracen",
+      "breakpoints": true
     }
   ]
 }
